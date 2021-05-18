@@ -1,8 +1,6 @@
-import sys
 from Node import Node
 import numpy as np
 import copy
-sys.path.append(".")
 
 
 class MCTS:
