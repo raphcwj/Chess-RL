@@ -1,7 +1,7 @@
 # Chess-RL
 Raphael Chew, Shaun Fendi Gan
 
-(6.884 : Computational Sensori Motor Learning)
+(6.884 : Computational Sensory Motor Learning)
 Offline Reinforcement Learning: DDQN-MCTS Chess Agent
 
 ## Abstract
