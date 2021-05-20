@@ -5,7 +5,7 @@ Raphael Chew, Shaun Fendi Gan
 
 DeepMind created their groundbreaking AlphaZero algorithm with an estimated $25 million dollars of computational power [1]. The goal of this project was to explore whether it would be possible to achieve some headway with a $9.99 Google Colab Pro GPU. 
 
-## Offline Reinforcement Learning: Exploring the Limits of a Lean Chess Agent
+## Offline Reinforcement Learning: Exploring the Limits of Lean Chess Agents
 
 Our research experiments with lighter versions of AlphaZero's offline reinforcement learning algorithm for chess. We reconstruct a leaner MCTS value and policy network algorithm from scratch, to investigate the possibility of training a less capable chess agent, but within the computational limitations of the average machine learning engineer. Specifically, we investigate the viability of using lean CNN architectures for mimicking the values and policies discovered by the MCTS during self-play. 
 
@@ -64,7 +64,7 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 * Train agents for upwards of 120 games to verify scale-up potential and overcome amateur blunders
 
 ## Report
-|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper%20Thumbnail.png" alt="Illustration" width="220px"/></a>|
+|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/RL-Chess%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper%20Thumbnail.png" alt="Illustration" width="220px"/></a>|
 |:--:|
 |Full Report|
 
