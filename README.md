@@ -53,6 +53,9 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 |:--:|
 |Full Report|
 
+## Example Games
+![Alt Text](https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif)
+
 ## Acknowledgements
 Shout out to Arjan Groen for building Q-Learning engines for Capture Chess and Real Chess
 
