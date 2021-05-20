@@ -23,6 +23,11 @@ Lean Convolutional Neural Networks (CNNs) were trained in a Double Deep Q-Networ
 - `GameSweep.py` - Game Sweep class to evaluate agent under test conditions, save pgn, and show game gif
 - `Trained Agent` - Contains a 120-game trained instance of the DDQN-MCTS agent (1-layer CNN, poisson loss, learning rate = 0.1)
 
+## Next Steps
+* Explore sparse CNNs to facilitate learning in the value head for sparse checkmate rewards
+* Experiment with different CNN structures
+* Train agents for upwards of 120 games to verify scale-up potential and overcome amateur blunders
+
 ## Training a DDQN-MCTS Agent
 ```python
 from Board import Board
@@ -55,18 +60,16 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 
 ## Example Games
 
-#### Vanilla MCTS DDQN against a Random Agent
+#### Vanilla DDQN-MCTS against a Random Agent
 
 <img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/MCTSvsRandom051921.gif" width="350" height="350" />
 
-#### Semi-Supervised StockFish MCTS DDQN against a Random Agent
+#### Semi-Supervised StockFish DDQN-MCTS against a Random Agent
 
 <img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif" width="350" height="350" />
-
-
-<!-- ![Alt Text](https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif) -->
 
 ## Acknowledgements
 Shout out to Arjan Groen for building Q-Learning engines for Capture Chess and Real Chess
 
 [1] Gibney, Elizabeth. "Self-taught AI is best yet at strategy game Go". Nature News. October 2017. Retrieved 10 May 2020.
+[2] Groen, Arjan. ""A collection of Reinforcement Learning Chess Algorithms". Accessed https://github.com/arjangroen/RLC
