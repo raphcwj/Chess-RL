@@ -64,7 +64,7 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 * Train agents for upwards of 120 games to verify scale-up potential and overcome amateur blunders
 
 ## Report
-|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/RL-Chess%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper%20Thumbnail.png" alt="Illustration" width="220px"/></a>|
+|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/RL-Chess%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/RL-Chess%20Paper%20Thumbnail.png" width="200px"/></a>|
 |:--:|
 |Full Report|
 
