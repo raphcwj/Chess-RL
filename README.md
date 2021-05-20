@@ -54,9 +54,15 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 |Full Report|
 
 ## Example Games
-#### Semi-Supervised StockFish MCTS against a Random Agent
 
-<img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif" width="400" height="400" />
+#### Vanilla MCTS DDQN against a Random Agent
+
+<img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/MCTSvsRandom051921.gif" width="350" height="350" />
+
+#### Semi-Supervised StockFish MCTS DDQN against a Random Agent
+
+<img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif" width="350" height="350" />
+
 
 <!-- ![Alt Text](https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif) -->
 
