@@ -13,21 +13,21 @@ Our research experiments with lighter versions of AlphaZero's offline reinforcem
 Lean Convolutional Neural Networks (CNNs) were trained in a Double Deep Q-Network (DDQN) setup using Reinforcement Learning (RL) to mimic a Monte Carlo Tree Search (MCTS) algorithm at playing chess. In just 120 training games, this agent achieved a 10.2% ± 3.8% win rate and < 1% loss rate against an opponent making random moves. Similarly, semi-supervised methods achieved a $15.3% ± 6.4% win rate with < 1% loss rate against the same opponent from 120 training games. Reward shaping and behavior cloning were also tested but did not produce effective chess agents. 
 
 ## Files 
-- `Board.py`- Board environment class for mathematically representing the chess board, stepping through moves, and checking game results
+- `main.py` - Main script for training a DDQN-MCTS agent
+- `Board.py` - Board environment class for mathematically representing the chess board, stepping through moves, and checking game results
 - `Agent.py` - Agent actor class for initializing networks, updating networks, and selecting moves
 - `DDQN_Engine.py` - DDQN engine class for training agent, updating agent, and managing the memory buffer
 - `MCTS.py` - MCTS algorithm class for searching promising move paths and backpropagating board state values
 - `MCTS_Stockfish` - Stockfish-guided MCTS algorithm class for added demonstration learning by providing expert board state values
 - `Node.py` - Node class to hold relevant attributes (value scores, visit counts, child nodes) for MCTS; contains UCB score function
 - `GameSweep.py` - Game Sweep class to evaluate agent under test conditions, save pgn, and show game gif
-- `Trained Agent` - Contains a 120-game trained instance of the DDQN-MCTS agent (1-layer CNN, poisson loss, lr = 0.1)
+- `Trained Agent` - Contains a 120-game trained instance of the DDQN-MCTS agent (1-layer CNN, poisson loss, learning rate = 0.1)
 
 ## Training a DDQN-MCTS Agent
 ```python
 from Board import Board
 from Agent import Agent
 from DDQN_Engine import DDQN_Engine
-
 
 # Parameters for training
 agent = "MCTS"  # initialize new 1-layer CNN MCTS agent
@@ -46,7 +46,6 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
                                                         max_moves=150,
                                                         current_level=0,
                                                         path_to_save=path)
-
 ```
 
 ## Report
