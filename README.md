@@ -5,7 +5,7 @@ Raphael Chew, Shaun Fendi Gan
 
 DeepMind created their groundbreaking AlphaZero algorithm with an estimated $25 million dollars of computational power [1]. The goal of this project was to explore whether it would be possible to achieve some headway with a $9.99 Google Colab Pro GPU. 
 
-## Offline Reinforcement Learning: Training a Lean Chess Agent
+## Offline Reinforcement Learning: Exploring the Limits of a Lean Chess Agent
 
 Our research experiments with lighter versions of AlphaZero's offline reinforcement learning algorithm for chess. We reconstruct a leaner MCTS value and policy network algorithm from scratch, to investigate the possibility of training a less capable chess agent, but within the computational limitations of the average machine learning engineer. Specifically, we investigate the viability of using lean CNN architectures for mimicking the values and policies discovered by the MCTS during self-play. 
 
@@ -22,11 +22,6 @@ Lean Convolutional Neural Networks (CNNs) were trained in a Double Deep Q-Networ
 - `Node.py` - Node class to hold relevant attributes (value scores, visit counts, child nodes) for MCTS; contains UCB score function
 - `GameSweep.py` - Game Sweep class to evaluate agent under test conditions, save pgn, and show game gif
 - `Trained Agent` - Contains a 120-game trained instance of the DDQN-MCTS agent (1-layer CNN, poisson loss, learning rate = 0.1)
-
-## Next Steps
-* Explore sparse CNNs to facilitate learning in the value head for sparse checkmate rewards
-* Experiment with different CNN structures
-* Train agents for upwards of 120 games to verify scale-up potential and overcome amateur blunders
 
 ## Training a DDQN-MCTS Agent
 ```python
@@ -53,11 +48,6 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
                                                         path_to_save=path)
 ```
 
-## Report
-|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper%20Thumbnail.png" alt="Illustration" width="220px"/></a>|
-|:--:|
-|Full Report|
-
 ## Example Games
 
 #### Vanilla DDQN-MCTS against a Random Agent
@@ -68,8 +58,20 @@ pgn, trained_agent, final_env, reward_df = engine.learn(training_games=300,
 
 <img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/StockfishMCTSvsRandom051921.gif" width="350" height="350" />
 
+## Next Steps
+* Explore sparse CNNs to facilitate learning in the value head for sparse checkmate rewards
+* Experiment with different CNN structures
+* Train agents for upwards of 120 games to verify scale-up potential and overcome amateur blunders
+
+## Report
+|<a href="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper.pdf"><img src="https://github.com/raphcwj/Chess-RL/blob/main/Paper/Chess-RL%20Paper%20Thumbnail.png" alt="Illustration" width="220px"/></a>|
+|:--:|
+|Full Report|
+
 ## Acknowledgements
-Shout out to Arjan Groen for building Q-Learning engines for Capture Chess and Real Chess
+Shout out to Arjan Groen for the clean implementation of Q-Learning chess engines that nudged us along in this research work.
 
 [1] Gibney, Elizabeth. "Self-taught AI is best yet at strategy game Go". Nature News. October 2017. Retrieved 10 May 2020.
-[2] Groen, Arjan. ""A collection of Reinforcement Learning Chess Algorithms". Accessed https://github.com/arjangroen/RLC
+
+[2] Groen, Arjan. ""A collection of Reinforcement Learning Chess Algorithms". 
+Accessed https://github.com/arjangroen/RLC
