@@ -1,10 +1,12 @@
 # Chess-RL
 Raphael Chew, Shaun Fendi Gan
 
-MIT 6.884: Computational Sensorimotor Learning
+(MIT 6.884: Computational Sensorimotor Learning)
+
+DeepMind created their groundbreaking AlphaZero algorithm with an estimated $35 million dollars of computational powwer. The goal of this project was to explore whether it would be possible to achieve some headway with a $9.99 Google Colab Pro GPU. 
+
 
 ## Offline Reinforcement Learning: Training a Lean Chess Agent
-DeepMind created their groundbreaking AlphaZero algorithm with an estimated $35 million dollars of computational powwer. The goal of this project was to explore whether it would be possible to achieve some headway with a $9.99 Google Colab Pro GPU. 
 
 Our research experiments with lighter versions of AlphaZero's offline reinforcement learning algorithm for chess. We reconstruct a leaner MCTS value and policy network algorithm from scratch, to investigate the possibility of training a less capable chess agent, but within the computational limitations of the average machine learning engineer. Specifically, we investigate the viability of using lean CNN architectures for mimicking the values and policies discovered by the MCTS during self-play. 
 
