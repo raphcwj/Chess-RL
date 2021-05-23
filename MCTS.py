@@ -4,7 +4,9 @@ import copy
 
 
 class MCTS:
-
+    """
+    Monte Carlo Tree Search algorithm
+    """
     def __init__(self, board, agent, args):
         self.env_mcts = board
         self.model = agent

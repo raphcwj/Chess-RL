@@ -11,14 +11,13 @@ class Board(object):
         Chess Board Environment
         Args:
             FEN: str
-                Starting FEN notation, if None then start in the default chess position
+                Initialized board in FEN notation, if None then start in the default chess position
         """
         self.FEN = FEN
         self.board = chess.Board(self.FEN) if self.FEN else chess.Board()
         self.init_action_space()
         self.layer_board = np.zeros(shape=(8, 8, 8))
         self.init_layer_board()
-        self.reward_shape = None
 
     def init_action_space(self):
         """
@@ -68,18 +67,12 @@ class Board(object):
             epsiode end: Boolean
                 Whether the episode has ended
             reward: int
-                Difference in material value after the move
+                1 if checkmate, else 0
         """
 
         self.board.push(action)  # make move
         self.init_layer_board()  # new board representation
         # Checkmate reward as white agent
-        # if self.board.result() == "1-0":
-        #   reward = 1
-        # elif self.board.result() == "0-1":
-        #   reward = -1
-        # else:
-        #   reward = 0
         reward = self.board.is_checkmate()
 
         # if game is over due to checkmate, stalemate, etc
@@ -154,7 +147,10 @@ class Board(object):
         self.init_action_space()
 
     def flip_layer_board(self):
+        """
+        Flips mathematical representation of board so that black agents see the board in the same perspective
 
+        """
         self.layer_board[0:5, :, :] = self.layer_board[0:5, ::-1, :] * -1
 
 

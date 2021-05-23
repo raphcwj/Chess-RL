@@ -12,7 +12,9 @@ def softmax(x):
     return list(e_x / e_x.sum())
 
 class DDQN_Engine(object):
-
+    """
+    DDQN Engine to train the agent's network through a MCTS for each move
+    """
     def __init__(self, agent, env, opponent_random=False, memsize=1000):
         """
         Reinforce object to learn real chess
@@ -50,7 +52,15 @@ class DDQN_Engine(object):
                 current number of games that the agent has been trained for already
             path_to_save: str
                 path to save model
-        Returns: pgn, agent, env, results
+        Returns:
+            final pgn: PGN
+                final game recording (use this to view final training game)
+            trained agent: Agent class
+                final trained agent
+            final env: Board class
+                final environment of last game
+            training results: pandas dataframe
+                record of training results
 
         """
         endgame_material = []
@@ -93,11 +103,18 @@ class DDQN_Engine(object):
 
     def play_game(self, maxiter=25):
         """
-        Play a game of capture chess
+        Play a training game of chess
         Args:
             maxiter: int
-                Maximum amount of steps per game
+                Maximum number of steps per game
         Returns:
+            reward,
+            self.env.board: Board class
+                board state at end of game
+            total_loss: float
+                loss from network update
+            turncount: int
+                number of turns (double of typical way of counting chess moves)
         """
         episode_end = False
         turncount = 0
@@ -180,10 +197,12 @@ class DDQN_Engine(object):
 
     def update_agent(self, turncount):
         """
-        Update the agent using experience replay. Set the sampling probs with the td error
+        Update the agent using experience replay. Set the sampling probs using td error
+        (memories with higher td_errors will be given a higher sampling probability)
+        (this gives the agent the chance to correct erroneous predictions)
         Args:
             turncount: int
-                Amount of turns played. Only sample the memory of there are sufficient samples
+                Number of turns played. Only sample the memory if there are sufficient samples
         Returns:
         """
         if turncount < len(self.memory):

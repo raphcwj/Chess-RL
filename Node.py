@@ -4,7 +4,8 @@ import numpy as np
 
 def ucb_score(parent, child):
     """
-    The score for an action that would transition between the parent and child.
+    The UCB score for an action that would transition between the parent and child
+    Encourages exploration for less-visited nodes
     """
     prior_score = child.prior * sqrt(parent.visit_count) / (child.visit_count + 1)
     value_score = -child.value() if child.visit_count > 0 else 0

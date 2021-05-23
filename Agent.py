@@ -7,17 +7,24 @@ import numpy as np
 
 class Agent(object):
 
-    def __init__(self, args, initial_network='linear', gamma=0.5, lr=0.01, verbose=0,
+    def __init__(self, args, initial_network='MCTS', gamma=0.5, lr=0.01, verbose=0,
                  model=None):
         """
-        Agent that plays the white pieces in capture chess
+        DDQN-MCTS Agent that plays white
+
         Args:
+            args: dict
+                Contains number of MCTS simulations per move search
+            initial_network: str or trained instance of an existing model
+                neural network architecture for DDQN; str options are:
+                    1. 'MCTS' (1-layer CNN)
+                    2. 'Mid MCTS' (2-layer CNN)
+                    3. 'Big MCTS' (3-layer CNN)
+                    4. 'random' (no NN, only makes random legal moves)
             gamma: float
                 Temporal discount factor
-            network: str
-                'linear' or 'conv'
             lr: float
-                Learning rate, ideally around 0.1
+                Learning rate
         """
         self.gamma = gamma
         self.network = initial_network
@@ -55,7 +62,7 @@ class Agent(object):
 
     def copy_model(self):
         """
-        The fixed model is the model used for bootstrapping
+        Copy current model instance to a fixed instance
         Returns:
         """
         optimizer = SGD(learning_rate=self.lr, momentum=0.0, decay=0.0, nesterov=False)
@@ -66,8 +73,7 @@ class Agent(object):
 
     def init_MCTS_network(self):
         """
-        Initialize a linear neural network
-        Returns:
+        Initialize a 1-layer CNN
         """
         optimizer = SGD(learning_rate=self.lr, momentum=0.0, decay=0.0, nesterov=False)
 
@@ -91,8 +97,7 @@ class Agent(object):
 
     def init_MidMCTS_network(self):
         """
-        Initialize a CNN
-        Returns:
+        Initialize a 2-layer CNN
         """
         optimizer = SGD(learning_rate=self.lr, momentum=0.0, decay=0.0, nesterov=False)
 
@@ -118,8 +123,7 @@ class Agent(object):
 
     def init_BigMCTS_network(self):
         """
-        Initialize a CNN
-        Returns:
+        Initialize a 3-layer CNN
         """
         optimizer = SGD(learning_rate=self.lr, momentum=0.0, decay=0.0, nesterov=False)
 
@@ -168,13 +172,19 @@ class Agent(object):
 
     def network_update(self, minibatch):
         """
-        Update the Q-network using samples from the minibatch
+        Update the Q-network using minibatch samples
         Args:
             minibatch: list
-                The minibatch contains the states, moves, rewards and new states.
+                contains samples from the memory buffer, which are:
+                    1. states: (8,8,8) shape that is the mathematical representation of the board
+                    2. moves: (1,2) tuple that contains move-from and move-to indices
+                    3. values: (1,1) shape that contains relative advantage of the board state
+                    4. action_probs: (1,4096) shape that contains relative strength of each move
         Returns:
             td_errors: np.array
-                array of temporal difference errors
+                temporal difference errors (later used for updating sample probabilities)
+            total_loss: float
+                network loss upon update (value should gradually decrease)
         """
         # Prepare separate lists
         states, moves, values, action_probs = [], [], [], []
@@ -183,37 +193,27 @@ class Agent(object):
         for sample in minibatch:
             states.append(sample[0])
             moves.append(sample[1])
-
-            ### Store new MCTS outputs ###
             values.append(sample[2])
             action_probs.append(sample[3])
-
-            # Episode end detection
-            # if new_state == 0, episode_ends = 0
-            # no additional reward if game is over
-            if np.array_equal(sample[3], sample[3] * 0):
-                episode_ends.append(0)
-            # additional reward appended if game is NOT over (see q_target calculation)
-            # continue game to capture more pieces and improve reward
-            else:
-                episode_ends.append(1)
 
         value_target = values
         q_target = action_probs
 
-        # The Q value for the remaining actions
+        # Get network predictions for value and action_probs
         value_state, q_state = self.model.predict(np.stack(states, axis=0))  # batch x 64 x 64
-        # print("Value Prediction = ", value_state)
-        # print("Action Probs Prediction = ", q_state)
 
-        # Combine the Q target with the other Q values.
+        # Reshape Q-values
         q_target = np.reshape(q_target, (len(minibatch), 64, 64))
         q_state = np.reshape(q_state, (len(minibatch), 64, 64))
-        # update q_state[move_index, move_from_tile, move_to_tile] with the q_target values
+
+        # Get td_errors
         for idx, move in enumerate(moves):
             td_errors.append(q_state[idx, move[0], move[1]] - q_target[idx, move[0], move[1]])
+            # Update value_state and q_state
             q_state[idx, move[0], move[1]] = q_target[idx, move[0], move[1]]
             value_state[idx] = value_target[idx]
+
+        # Reshape q_state to prepare for network update
         q_state = np.reshape(q_state, (len(minibatch), 4096))
 
         # Perform a step of minibatch Gradient Descent.
@@ -227,14 +227,45 @@ class Agent(object):
         return td_errors, total_loss
 
     def get_MCTS_move(self, env):
-
+        """
+        Gets best move based on monte carlo tree search
+        Args:
+            env: object of Board class
+                current chess board environment that contains info about current game state
+        Returns:
+            move_from: int
+                move_from square
+            move_to: int
+                move_to square
+            move: str
+                UCI-format move
+            root: object of Node class
+                root node of MCTS after all simulations
+            best_value: float
+                aggregated value prediction by the MCTS for the selected move
+        """
         MCTS_iteration = MCTS(env, self.model, self.args)
         root = MCTS_iteration.run()
-        MCTS_action, best_value = root.select_action()
-        move_from, move_to, move = self.find_uci_move(MCTS_action, env)
+        MCTS_action, best_value = root.select_action() # move is still in integer-format
+        move_from, move_to, move = self.find_uci_move(MCTS_action, env) # convert move to UCI-format
         return move_from, move_to, move, root, best_value
 
     def find_uci_move(self, action, env):
+        """
+        Finds the corresponding UCI-format move from integer-format move
+        Args:
+            action: int
+                move in integer-format
+            env: object of Board class
+                current chess board environment that contains info about current game state
+        Returns:
+            move_from: int
+                move_from square
+            move_to: int
+                move_to square
+            move: str
+                uci-format move
+        """
         move_from, move_to = action // 64, action % 64
 
         move = [x for x in env.board.generate_legal_moves() if \
@@ -243,14 +274,21 @@ class Agent(object):
 
     def get_best_move(self, state, env, explore_move=False):
         """
-        Get action values of a state
+        Gets best move based on network prediction
         Args:
             state: np.ndarray with shape (8,8,8)
-                layer_board representation
+                layer_board mathematical representation
+            env: object of Board class
+                current chess board environment that contains info about current game state
             explore_move: boolean
                 whether the agent should do a random action
         Returns:
-            best move (derived from action_values)
+            move_from: int
+                move_from square
+            move_to: int
+                move_to square
+            move: str
+                uci-format move
         """
         # print("Black inner env = ", env)
         if explore_move:
